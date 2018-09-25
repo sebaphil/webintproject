@@ -14,20 +14,21 @@ def retrieve_n_questions(number_of_questions):
     logger.log_request(retrieve_n_questions.__name__, url)
     return result
 
-def retrieve_single_user(user_id):
-    url = 'https://api.stackexchange.com/2.2/users/' + str(user_id) + '?page=1&pagesize=1&order=desc&sort=reputation&site=stackoverflow'
+def retrieve_multiple_users(users_ids_list):
+    users_string = ';'.join(users_ids_list)
+    url = 'https://api.stackexchange.com/2.2/users/' + users_string + '?page=1&pagesize=100&order=desc&sort=reputation&site=stackoverflow'
     result = request_to_api(url)
-    logger.log_request(retrieve_single_user.__name__, url)
+    logger.log_request(retrieve_multiple_users.__name__, url)
     return result
 
 def retrieve_answers_for_question(question_id):
     url = 'https://api.stackexchange.com/2.2/questions/' + str(question_id) + '/answers?order=desc&sort=activity&site=stackoverflow'
     result = request_to_api(url)
-    logger.log_request(retrieve_single_user.__name__, url)
+    logger.log_request(retrieve_answers_for_question.__name__, url)
     return result
 
 def retrieve_comments_for_post(post_id):
     url = 'https://api.stackexchange.com/2.2/posts/' + str(post_id) + '/comments?order=desc&sort=creation&site=stackoverflow'
     result = request_to_api(url)
-    logger.log_request(retrieve_single_user.__name__, url)
+    logger.log_request(retrieve_comments_for_post.__name__, url)
     return result

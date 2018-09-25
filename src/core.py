@@ -21,7 +21,7 @@ questions_collection.insert_many(questions_to_insert['items'])
 
 
 questions_in_collection = questions_collection.find({})
-users = []
+#users = []
 users_ids = []
 answers = []
 questions_ids = []
@@ -32,7 +32,7 @@ for question in questions_in_collection:
 
     if user_id not in users_ids:
         users_ids.append(user_id)
-        users.append(retrieve_single_user(user_id))
+        #users.append(retrieve_single_user(user_id))
 
     if is_answered:
         question_id = question['question_id']
@@ -40,6 +40,7 @@ for question in questions_in_collection:
     
     questions_ids.append(question_id)
 
+users = retrieve_multiple_users(users_ids)['items']
 users_collection.insert_many(users)
 answers_collection.insert_many(answers)
 
