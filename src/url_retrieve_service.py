@@ -8,10 +8,12 @@ def request_to_api(url):
     filename, _ = urllib.urlretrieve(url)
     return json.loads(gzip.GzipFile(filename).read())
 
-def retrieve_n_questions(number_of_questions):
-    url = 'https://api.stackexchange.com/2.2/questions?tagged=postgres&filter=withbody&page=1&pagesize='+str(number_of_questions)+'&order=asc&sort=creation&site=stackoverflow'
-    result = request_to_api(url)
-    logger.log_request(retrieve_n_questions.__name__, url)
+def retrieve_n_questions():
+    result = []
+    for i in range(100):
+        url = 'https://api.stackexchange.com/2.2/questions?tagged=postgres&filter=withbody&page=' + str(i+1) + '&pagesize=100&order=asc&sort=creation&site=stackoverflow'
+        result.append(request_to_api(url))
+        logger.log_request(retrieve_n_questions.__name__, url)
     return result
 
 def retrieve_multiple_users(users_ids_list):
@@ -21,10 +23,11 @@ def retrieve_multiple_users(users_ids_list):
     logger.log_request(retrieve_multiple_users.__name__, url)
     return result
 
-def retrieve_answers_for_question(question_id):
-    url = 'https://api.stackexchange.com/2.2/questions/' + str(question_id) + '/answers?order=desc&sort=activity&site=stackoverflow'
+def retrieve_answers_for_questions(questions_ids):
+    questions_string = ';'.join(questions_ids)
+    url = 'https://api.stackexchange.com/2.2/questions/' + questions_string + '/answers?order=desc&sort=activity&site=stackoverflow'
     result = request_to_api(url)
-    logger.log_request(retrieve_answers_for_question.__name__, url)
+    logger.log_request(retrieve_answers_for_questions.__name__, url)
     return result
 
 def retrieve_comments_for_post(post_id):
