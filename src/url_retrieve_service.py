@@ -3,8 +3,10 @@ import json
 import urllib
 import logger
 import requests
+import time
 
 def request_to_api(url):
+    time.sleep(1)
     filename, _ = urllib.urlretrieve(url)
     return json.loads(gzip.GzipFile(filename).read())
 

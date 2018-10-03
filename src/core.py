@@ -88,7 +88,7 @@ for user_id in users_ids:
             number_of_retrieved_users = 1
         except KeyError:
             log_retrieve_users(users_request_response)
-        
+
 users_collection.insert_many(users_to_be_inserted)
 
 # posts_ids = questions_ids + answers_ids
