@@ -33,7 +33,7 @@ for question in questions_in_collection:
         user_id = question['owner']['user_id']
 #         is_answered = question['is_answered']
         question_id = question['question_id']
-        questions_ids.append(question_id)
+        questions_ids.append(str(question_id))
 
         if user_id not in users_ids:
             users_ids.append(str(user_id))
@@ -68,7 +68,7 @@ for answer in answers_in_collection:
             users_ids.append(str(user_id))
 
     answer_id = answer['answer_id']
-    answers_ids.append(answer_id)
+    answers_ids.append(str(answer_id))
 
 
 number_of_retrieved_users = 0
@@ -91,14 +91,28 @@ for user_id in users_ids:
 
 users_collection.insert_many(users_to_be_inserted)
 
-# posts_ids = questions_ids + answers_ids
+posts_ids = questions_ids + answers_ids
 
 
-# comments = []
-# for post_id in posts_ids:
-#     comments += retrieve_comments_for_post(post_id)['items']
-
-# comments_collection.insert_many(comments)
+number_of_posts_to_retrieve_comments_for = 0
+posts_ids_to_use_for_request = []
+comments_to_be_inserted = []
+for post_id in posts_ids:
+    if number_of_posts_to_retrieve_comments_for < 100:
+        posts_ids_to_use_for_request.append(post_id)
+        number_of_posts_to_retrieve_comments_for += 1
+    else:
+        comments_request_response = {}
+        try:
+            comments_request_response = retrieve_comments_for_posts(posts_ids_to_use_for_request)
+            comments_to_be_inserted += comments_request_response['items']
+            posts_ids_to_use_for_request = []
+            posts_ids_to_use_for_request.append(post_id)
+            number_of_posts_to_retrieve_comments_for = 1
+        except KeyError:
+            log_retrieve_comments(comments_request_response)
+            
+comments_collection.insert_many(comments_to_be_inserted)
 
 # # PART B
 

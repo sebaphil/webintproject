@@ -18,3 +18,9 @@ def log_retrieve_users(user):
     log.write('\n' + str(datetime.now()) +" " + "Error while retrieving information from users." + " - Response body:")
     pprint(user, log)
     log.close()
+
+def log_retrieve_comments(comment):
+    log = open(os.getcwd() + "/logs/retrieve-comments.log", "a")
+    log.write('\n' + str(datetime.now()) +" " + "Error while retrieving information from comments." + " - Response body:")
+    pprint(comment, log)
+    log.close()

@@ -32,8 +32,9 @@ def retrieve_answers_for_questions(questions_ids):
     logger.log_request(retrieve_answers_for_questions.__name__, url)
     return result
 
-def retrieve_comments_for_post(post_id):
-    url = 'https://api.stackexchange.com/2.2/posts/' + str(post_id) + '/comments?order=desc&sort=creation&site=stackoverflow'
+def retrieve_comments_for_posts(posts_ids):
+    posts_string = ';'.join(posts_ids)
+    url = 'https://api.stackexchange.com/2.2/posts/' + posts_string + '/comments?order=desc&sort=creation&site=stackoverflow'
     result = request_to_api(url)
-    logger.log_request(retrieve_comments_for_post.__name__, url)
+    logger.log_request(retrieve_comments_for_posts.__name__, url)
     return result
