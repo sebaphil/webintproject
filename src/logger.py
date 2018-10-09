@@ -24,3 +24,10 @@ def log_retrieve_comments(comment):
     log.write('\n' + str(datetime.now()) +" " + "Error while retrieving information from comments." + " - Response body:")
     pprint(comment, log)
     log.close()
+
+def log_retrieve_text_from_posts(text):
+    log = open(os.getcwd() + "/logs/retrieve-text-from-posts.log", "a")
+    log.write('\n' + str(datetime.now()) +" " + "Retrieved text:")
+    log.write('\n')
+    pprint(text, log)
+    log.close()

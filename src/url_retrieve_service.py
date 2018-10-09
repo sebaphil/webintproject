@@ -4,6 +4,7 @@ import urllib
 import logger
 import requests
 import time
+from bs4 import BeautifulSoup
 
 def request_to_api(url):
     time.sleep(1)
@@ -38,3 +39,26 @@ def retrieve_comments_for_posts(posts_ids):
     result = request_to_api(url)
     logger.log_request(retrieve_comments_for_posts.__name__, url)
     return result
+
+def retrieve_question_answers_and_comments_text(question_id):
+    time.sleep(2)
+    question_url = 'https://www.stackoverflow.com/questions/' + str(question_id) + '/'
+    html_code = urllib.urlopen(question_url).read()
+    logger.log_retrieve_text_from_posts(html_code)
+    html_code_soup = BeautifulSoup(html_code, 'html.parser')
+    code_tags = html_code_soup.find_all('code')
+
+    for code_tag in code_tags:
+        code_tag.extract()
+
+    question_and_answers_html = html_code_soup.find_all('div', class_ = 'post-text')
+    comments_html = html_code_soup.find_all('div', class_ = 'comment-body')
+    question_answers_and_comments_text = []
+
+    for element in question_and_answers_html:
+        question_answers_and_comments_text.append(element.get_text())
+
+    for element in comments_html:
+        question_answers_and_comments_text.append(element.get_text())
+    
+    return question_answers_and_comments_text
